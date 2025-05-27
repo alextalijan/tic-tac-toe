@@ -1,72 +1,74 @@
-const Game = (function () {
-    const Gameboard = (function () {
-        const board = [
-            ["EMPTY", "EMPTY", "EMPTY"],
-            ["EMPTY", "EMPTY", "EMPTY"],
-            ["EMPTY", "EMPTY", "EMPTY"]
-        ];
+const Gameboard = (function () {
 
-        // Determine what player has the turn
-        const turnPlayer = function () {
-            let emptyFields = 0;
+    const board = [
+        ["EMPTY", "EMPTY", "EMPTY"],
+        ["EMPTY", "EMPTY", "EMPTY"],
+        ["EMPTY", "EMPTY", "EMPTY"]
+    ];
 
-            for (const row of board) {
-                for (const field of row) {
-                    if (field === "EMPTY") {
-                        emptyFields++;
-                    }
+    // Determine what player has the turn
+    const turnPlayer = function () {
+        let emptyFields = 0;
+
+        for (const row of board) {
+            for (const field of row) {
+                if (field === "EMPTY") {
+                    emptyFields++;
                 }
             }
-
-            // If the number of empty fields is odd, it's O's turn
-            if (emptyFields % 2 === 1) {
-                return "O";
-            } else {
-                return "X";
-            }
-        };
-
-        // Returns a list of all available moves
-        const getAvailableMoves = function () {
-            const availableMoves = [];
-
-            for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 3; j++) {
-                    if (Gameboard.board[i][j] === "EMPTY") {
-                        availableMoves.push([i, j]);
-                    }
-                }
-            }
-
-            return availableMoves;
         }
 
-        const makeMove = function (move) {
-            // Check if the move is legal
-            if (move.length === 2 && move[0] >= 0 && move[0] <= 2 && move[1] >= 0 && move[1] <= 2) {
-                // If the move is available, make it, else tell them to pick another
-                if (getAvailableMoves().some(availableMove => availableMove[0] === playerMove[0] && availableMove[1] === playerMove[1])) {
-                    console.log(`Player ${turnPlayer()} has made a move.`);
-                    board[move[0]][move[1]] = turnPlayer();
-                } else {
-                    console.log("That move has already been played. Pick another one.");
+        // If the number of empty fields is odd, it's O's turn
+        if (emptyFields % 2 === 1) {
+            return "O";
+        } else {
+            return "X";
+        }
+    };
+
+    // Returns a list of all available moves
+    const getAvailableMoves = function () {
+        const availableMoves = [];
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (Gameboard.board[i][j] === "EMPTY") {
+                    availableMoves.push([i, j]);
                 }
+            }
+        }
+
+        return availableMoves;
+    }
+
+    const makeMove = function (move) {
+        // Check if the move is legal
+        if (move.length === 2 && move[0] >= 0 && move[0] <= 2 && move[1] >= 0 && move[1] <= 2) {
+            // If the move is available, make it, else tell them to pick another
+            if (getAvailableMoves().some(availableMove => availableMove[0] === playerMove[0] && availableMove[1] === playerMove[1])) {
+                console.log(`Player ${turnPlayer()} has made a move.`);
+                board[move[0]][move[1]] = turnPlayer();
             } else {
-                console.log("Out of bounds move. Please provide a legal one.");
+                console.log("That move has already been played. Pick another one.");
             }
-        };
+        } else {
+            console.log("Out of bounds move. Please provide a legal one.");
+        }
+    };
 
-        const clearBoard = function () {
-            for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 3; j++) {
-                    board[i][j] = "EMPTY";
-                }
+    const clearBoard = function () {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                board[i][j] = "EMPTY";
             }
-        };
+        }
+    };
 
-        return {board, turnPlayer, getAvailableMoves, makeMove, clearBoard};
-    })();
+    return {board, turnPlayer, getAvailableMoves, makeMove, clearBoard};
+})();
 
+const Game = (function () {
+    
     const newGame = function () {
         Gameboard.clearBoard();
         console.log("Starting new game...");
@@ -94,7 +96,7 @@ const Game = (function () {
             }
         }
 
-        // If there aren't available moves, the game is done
+        // If there aren't available moves, the game is done through tie
         if (Gameboard.getAvailableMoves().length === 0) {
             return true;
         } else {
@@ -116,6 +118,7 @@ const Game = (function () {
             console.log("This move doesn't exist. Make sure to respect the format - '0,0', '1,0'...");
         }
 
+        // Show the board result of the round
         console.clear();
         Gameboard.makeMove(playerMove);
         console.table(Gameboard.board);
@@ -139,4 +142,28 @@ const Game = (function () {
     };
 
     return {newGame};
+})();
+
+const displayController = (function () {
+    const gameDisplay = document.querySelector(".game-display");
+
+    const render = function () {
+        // Clear the current display
+        gameDisplay.innerHTML = "";
+
+        // Print every field
+        for (const row of Gameboard.board) {
+            for (const field of row) {
+                const newFieldDiv = document.createElement("div");
+
+                if (field !== "EMPTY") {
+                    newFieldDiv.textContent = field;
+                }
+
+                gameDisplay.appendChild(newFieldDiv);
+            }
+        }
+    };
+
+    return {render};
 })();
