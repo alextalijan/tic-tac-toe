@@ -35,12 +35,15 @@ body {
 }
 
 .start-game-modal:modal {
-    padding: 3.5rem 2rem 2rem;
+    padding: 2rem;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 1rem;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 .close-modal-btn {
@@ -56,6 +59,12 @@ body {
 
 .close-modal-btn:hover {
     background-color: #d65c5c;
+}
+
+.modal-heading {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 .start-game-modal > form {
