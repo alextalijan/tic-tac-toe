@@ -35,18 +35,34 @@ body {
 }
 
 .start-game-modal:modal {
-    padding: 2rem;
+    padding: 3.5rem 2rem 2rem;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 1rem;
+    position: relative;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 5%;
+    right: 2%;
+    padding: 0.1em 0.4em;
+    border-radius: 100%;
+    cursor: pointer;
+    background-color: #e57373;
+    transition: background-color 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    background-color: #d65c5c;
 }
 
 .start-game-modal > form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.5rem;
 }
 
 .start-game-btn {

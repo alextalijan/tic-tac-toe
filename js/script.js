@@ -181,10 +181,19 @@ const displayController = (function () {
 
 // When the new game button is clicked, prompt the users for names
 startGameModal = document.querySelector(".start-game-modal");
+const modalForm = document.querySelector(".start-game-modal > form");
 const newGameButton = document.querySelector(".new-game-btn");
 newGameButton.addEventListener("click", () => {
     startGameModal.showModal();
 });
+
+// Allow users to close the modal
+closeModalBtn = startGameModal.querySelector(".close-modal-btn");
+closeModalBtn.addEventListener("click", () => {
+    modalForm.reset();
+    startGameModal.close();
+});
+
 
 const startGameButton = document.querySelector(".start-game-btn");
 startGameButton.addEventListener("click", (event) => {
@@ -194,7 +203,6 @@ startGameButton.addEventListener("click", (event) => {
 
     // Stop the form from submitting and capture input for names
     event.preventDefault();
-    const modalForm = document.querySelector(".start-game-modal > form");
     window.playerO = Player(modalForm.querySelector("#playerOName").value, "O");
     window.playerX = Player(modalForm.querySelector("#playerXName").value, "X");
 
