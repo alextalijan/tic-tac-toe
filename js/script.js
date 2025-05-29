@@ -164,6 +164,6 @@ const displayController = (function () {
 // When the new game button is clicked, start the new game
 const newGameButton = document.querySelector(".new-game-btn");
 newGameButton.addEventListener("click", () => {
-    gameDisplay.style.display = "grid";
+    gameDisplay.style.visibility = "visible";
     Game.playGame();
 });
