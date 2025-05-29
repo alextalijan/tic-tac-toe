@@ -1,3 +1,11 @@
+const Player = function (name, icon) {
+    if (icon !== "X" && icon !== "O") {
+        throw new Error("Please choose a valid icon. Either 'X' or 'O'.");
+    } else {
+        return {name, icon};
+    }
+};
+
 const Gameboard = (function () {
 
     const board = [
@@ -20,9 +28,9 @@ const Gameboard = (function () {
 
         // If the number of empty fields is odd, it's O's turn
         if (emptyFields % 2 === 1) {
-            return "O";
+            return window.playerO;
         } else {
-            return "X";
+            return window.playerX;
         }
     };
 
@@ -46,7 +54,7 @@ const Gameboard = (function () {
         if (move.length === 2 && move[0] >= 0 && move[0] <= 2 && move[1] >= 0 && move[1] <= 2) {
             // If the move is available, make it, else tell them to pick another
             if (getAvailableMoves().some(availableMove => availableMove[0] === move[0] && availableMove[1] === move[1])) {
-                board[move[0]][move[1]] = turnPlayer();
+                board[move[0]][move[1]] = turnPlayer().icon;
                 displayController.render();
             } else {
                 alert("That move has already been played. Pick another one.");
@@ -103,7 +111,7 @@ const Game = (function () {
 
         // Stop the message from showing up if the game is won.
         if (!isGameOver()) {
-            alert(`${Gameboard.turnPlayer()}, it's your turn.`);
+            alert(`${Gameboard.turnPlayer().name}, it's your turn.`);
 
         }
     };
@@ -113,7 +121,7 @@ const Game = (function () {
         Gameboard.clearBoard();
         displayController.render();
         alert("Starting new game...");
-        alert("O goes first.");
+        alert(`${window.playerO.name} goes first.`);
 
         gameDisplay.addEventListener("click", function roundHandler(event) {
             playRound(event.target.dataAttribute.split(",").map(stringNumber => parseInt(stringNumber)));
@@ -124,9 +132,18 @@ const Game = (function () {
 
                 // If there is a winner, announce him, else it's a tie
                 // The isGameOver() function returns a winner if existing
+                const winnerAnnouncementDiv = document.querySelector(".winner-announcement");
                 if (playerIcons.includes(isGameOver())) {
-                    alert(`The winner is ${isGameOver()}!`);
+                    let winner;
+                    if (isGameOver() === "O") {
+                        winner = window.playerO;
+                    } else {
+                        winner = window.playerX;
+                    }
+                    winnerAnnouncementDiv.textContent = `The winner is ${winner.name}!`;
+                    alert(`The winner is ${winner.name}!`);
                 } else {
+                    winnerAnnouncementDiv.textContent = "It's a tie.";
                     alert("It's a tie.");
                 }
             }
@@ -169,7 +186,15 @@ newGameButton.addEventListener("click", () => {
 });
 
 const startGameButton = document.querySelector(".start-game-btn");
-startGameButton.addEventListener("click", () => {
+startGameButton.addEventListener("click", (event) => {
+    // Stop the form from submitting and capture input for names
+    event.preventDefault();
+    const modalForm = document.querySelector(".start-game-modal > form");
+    window.playerO = Player(modalForm.querySelector("#playerOName").value, "O");
+    window.playerX = Player(modalForm.querySelector("#playerXName").value, "X");
+
+    // Clear the form for future use and start the game
+    modalForm.reset();
     startGameModal.close();
     gameDisplay.style.visibility = "visible";
     Game.playGame();

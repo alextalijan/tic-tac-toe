@@ -12,19 +12,22 @@
         <h1 class="title">Tic Tac Toe</h1>
         <button type="button" class="new-game-btn">New Game</button>
         <dialog class="start-game-modal">
-          <div>
-            <label for="playerOneName">Player One Name (0)</label>
-            <input type="text" id="playerOneName" required>
-          </div>
-          <div>
-            <label for="playerTwoName">Player Two Name (X)</label>
-            <input type="text" id="playerTwoName" required>
-          </div>
-          <div>
-            <button class="start-game-btn" type="button">Start Game</button>
-          </div>
+          <form action="" method="get">
+            <div>
+              <label for="playerOName">Player One Name (0)</label>
+              <input type="text" id="playerOName" required>
+            </div>
+            <div>
+              <label for="playerXName">Player Two Name (X)</label>
+              <input type="text" id="playerXName" required>
+            </div>
+            <div>
+              <button class="start-game-btn" type="submit">Start Game</button>
+            </div>
+          </form>
         </dialog>
         <div class="game-display"></div>
+        <div class="winner-announcement"></div>
       </div>
     </body>
   </html>
