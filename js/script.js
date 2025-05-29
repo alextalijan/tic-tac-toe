@@ -47,6 +47,7 @@ const Gameboard = (function () {
             // If the move is available, make it, else tell them to pick another
             if (getAvailableMoves().some(availableMove => availableMove[0] === move[0] && availableMove[1] === move[1])) {
                 board[move[0]][move[1]] = turnPlayer();
+                displayController.render();
             } else {
                 alert("That move has already been played. Pick another one.");
             }
@@ -97,10 +98,14 @@ const Game = (function () {
     }
 
     const playRound = function (playerMove) {
-        // Show the board result of the round
-        console.clear();
+        // Make the move
         Gameboard.makeMove(playerMove);
-        console.table(Gameboard.board);
+
+        // Stop the message from showing up if the game is won.
+        if (!isGameOver()) {
+            alert(`${Gameboard.turnPlayer()}, it's your turn.`);
+
+        }
     };
 
     const playGame = function () {
@@ -108,25 +113,27 @@ const Game = (function () {
         Gameboard.clearBoard();
         displayController.render();
         alert("Starting new game...");
+        alert("O goes first.");
 
-        // While the game isn't done, play a round
-        while (!isGameOver()) {
-            alert(`${Gameboard.turnPlayer()}, it's your turn.`);
-            playRound();
-        }
+        gameDisplay.addEventListener("click", function roundHandler(event) {
+            playRound(event.target.dataAttribute.split(",").map(stringNumber => parseInt(stringNumber)));
 
-        const playerIcons = ["X", "O"];
+            if (isGameOver()) {
+                gameDisplay.removeEventListener("click", roundHandler);
+                const playerIcons = ["X", "O"];
 
-        // If there is a winner, announce him, else it's a tie
-        // The isGameOver() function returns a winner if existing
-        if (playerIcons.includes(isGameOver())) {
-            alert(`The winner is ${isGameOver()}!`);
-        } else {
-            alert("It's a tie.");
-        }
+                // If there is a winner, announce him, else it's a tie
+                // The isGameOver() function returns a winner if existing
+                if (playerIcons.includes(isGameOver())) {
+                    alert(`The winner is ${isGameOver()}!`);
+                } else {
+                    alert("It's a tie.");
+                }
+            }
+        });
     };
 
-    return {playGame, playRound};
+    return {playGame, playRound, isGameOver};
 })();
 
 const gameDisplay = document.querySelector(".game-display");
@@ -151,12 +158,6 @@ const displayController = (function () {
         }
     };
 
-    gameDisplay.addEventListener("click", (event) => {
-        // Set the proper icon of the player inside the clicked field
-        Game.playRound(event.target.dataAttribute.split(",").map(stringNumber => parseInt(stringNumber)));
-        render();
-    });
-
     return {render};
 })();
 
@@ -164,5 +165,5 @@ const displayController = (function () {
 const newGameButton = document.querySelector(".new-game-btn");
 newGameButton.addEventListener("click", () => {
     gameDisplay.style.display = "grid";
-    Game.newGame();
+    Game.playGame();
 });
