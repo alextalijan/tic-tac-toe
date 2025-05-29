@@ -161,9 +161,17 @@ const displayController = (function () {
     return {render};
 })();
 
-// When the new game button is clicked, start the new game
+// When the new game button is clicked, prompt the users for names
+startGameModal = document.querySelector(".start-game-modal");
 const newGameButton = document.querySelector(".new-game-btn");
 newGameButton.addEventListener("click", () => {
+    startGameModal.showModal();
+});
+
+const startGameButton = document.querySelector(".start-game-btn");
+startGameButton.addEventListener("click", () => {
+    startGameModal.close();
     gameDisplay.style.visibility = "visible";
     Game.playGame();
 });
+

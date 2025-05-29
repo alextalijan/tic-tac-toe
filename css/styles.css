@@ -34,6 +34,30 @@ body {
     background-color: #E6D6B7;
 }
 
+.start-game-modal:modal {
+    padding: 2rem;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.start-game-btn {
+    margin-top: 1rem;
+    padding: 0.5em 1.5em;
+    border-radius: 1rem;
+    background-color: #FFD4B8;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.start-game-btn:hover {
+    background-color: #E6BEA5;
+}
+
 .game-display {
     height: 600px;
     width: 600px;

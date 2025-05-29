@@ -11,6 +11,19 @@
       <div class="wrapper">
         <h1 class="title">Tic Tac Toe</h1>
         <button type="button" class="new-game-btn">New Game</button>
+        <dialog class="start-game-modal">
+          <div>
+            <label for="playerOneName">Player One Name (0)</label>
+            <input type="text" id="playerOneName" required>
+          </div>
+          <div>
+            <label for="playerTwoName">Player Two Name (X)</label>
+            <input type="text" id="playerTwoName" required>
+          </div>
+          <div>
+            <button class="start-game-btn" type="button">Start Game</button>
+          </div>
+        </dialog>
         <div class="game-display"></div>
       </div>
     </body>
