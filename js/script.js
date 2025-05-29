@@ -124,6 +124,7 @@ const Game = (function () {
         alert(`${window.playerO.name} goes first.`);
 
         gameDisplay.addEventListener("click", function roundHandler(event) {
+            event.stopPropagation();
             playRound(event.target.dataAttribute.split(",").map(stringNumber => parseInt(stringNumber)));
 
             if (isGameOver()) {
@@ -187,6 +188,10 @@ newGameButton.addEventListener("click", () => {
 
 const startGameButton = document.querySelector(".start-game-btn");
 startGameButton.addEventListener("click", (event) => {
+    // Clear the result announcement of the last round
+    const winnerAnnouncementDiv = document.querySelector(".winner-announcement");
+    winnerAnnouncementDiv.textContent = "";
+
     // Stop the form from submitting and capture input for names
     event.preventDefault();
     const modalForm = document.querySelector(".start-game-modal > form");
