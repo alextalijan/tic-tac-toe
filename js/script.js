@@ -120,7 +120,7 @@ const Game = (function () {
         // Initiate the start of a new game
         Gameboard.clearBoard();
         displayController.render();
-        alert("Starting new game...");
+        alert("Starting a new game...");
         alert(`${window.playerO.name} goes first.`);
 
         gameDisplay.addEventListener("click", function roundHandler(event) {
@@ -197,19 +197,28 @@ closeModalBtn.addEventListener("click", () => {
 
 const startGameButton = document.querySelector(".start-game-btn");
 startGameButton.addEventListener("click", (event) => {
-    // Clear the result announcement of the last round
-    const winnerAnnouncementDiv = document.querySelector(".winner-announcement");
-    winnerAnnouncementDiv.textContent = "";
-
     // Stop the form from submitting and capture input for names
     event.preventDefault();
-    window.playerO = Player(modalForm.querySelector("#playerOName").value, "O");
-    window.playerX = Player(modalForm.querySelector("#playerXName").value, "X");
+    playerOName = modalForm.querySelector("#playerOName").value;
+    playerXName = modalForm.querySelector("#playerXName").value;
 
-    // Clear the form for future use and start the game
-    modalForm.reset();
-    startGameModal.close();
-    gameDisplay.style.visibility = "visible";
-    Game.playGame();
+    // If one of the names haven't been inputed, alert them, else proceed with the game
+    if (!playerOName || !playerXName) {
+        alert("Please input both players' names.");
+    } else {
+        // Clear the result announcement of the last round
+        const winnerAnnouncementDiv = document.querySelector(".winner-announcement");
+        winnerAnnouncementDiv.textContent = "";
+
+        // Create players as global variables
+        window.playerO = Player(playerOName, "O");
+        window.playerX = Player(playerXName, "X");
+
+        // Clear the form for future use and start the game
+        modalForm.reset();
+        startGameModal.close();
+        gameDisplay.style.visibility = "visible";
+        Game.playGame();
+    }
 });
 
