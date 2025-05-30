@@ -123,12 +123,11 @@ const Game = (function () {
         alert("Starting a new game...");
         alert(`${window.playerO.name} goes first.`);
 
-        gameDisplay.addEventListener("click", function roundHandler(event) {
-            event.stopPropagation();
+        gameDisplay.onclick = function roundHandler(event) {
             playRound(event.target.dataAttribute.split(",").map(stringNumber => parseInt(stringNumber)));
 
             if (isGameOver()) {
-                gameDisplay.removeEventListener("click", roundHandler);
+                gameDisplay.onclick = null;
                 const playerIcons = ["X", "O"];
 
                 // If there is a winner, announce him, else it's a tie
@@ -148,7 +147,7 @@ const Game = (function () {
                     alert("It's a tie.");
                 }
             }
-        });
+        };
     };
 
     return {playGame, playRound, isGameOver};
@@ -206,6 +205,9 @@ startGameButton.addEventListener("click", (event) => {
     if (!playerOName || !playerXName) {
         alert("Please input both players' names.");
     } else {
+        // Remove event handler from previous round
+        // gameDisplay.removeEventListener("click", roundHandler);
+
         // Clear the result announcement of the last round
         const winnerAnnouncementDiv = document.querySelector(".winner-announcement");
         winnerAnnouncementDiv.textContent = "";
