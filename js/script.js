@@ -128,6 +128,7 @@ const Game = (function () {
         }, 1000);
 
         gameDisplay.onclick = function roundHandler(event) {
+            // Play the move that was clicked
             playRound(event.target.dataAttribute.split(",").map(stringNumber => parseInt(stringNumber)));
 
             if (isGameOver()) {
@@ -135,7 +136,7 @@ const Game = (function () {
                 const playerIcons = ["X", "O"];
 
                 // If there is a winner, announce him, else it's a tie
-                // The isGameOver() function returns a winner if existing
+                // The isGameOver() function returns a winner if he exists
                 if (playerIcons.includes(isGameOver())) {
                     let winner;
                     if (isGameOver() === "O") {
@@ -210,9 +211,11 @@ startGameButton.addEventListener("click", (event) => {
         window.playerO = Player(playerOName, "O");
         window.playerX = Player(playerXName, "X");
 
-        // Clear the form for future use and start the game
+        // Clear the form for future use
         modalForm.reset();
         startGameModal.close();
+
+        // Start the game
         gameDisplay.style.visibility = "visible";
         Game.playGame();
     }
