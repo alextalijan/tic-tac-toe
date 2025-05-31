@@ -105,14 +105,16 @@ const Game = (function () {
         }
     }
 
+    // Use title heading as an announcer for turns.
+    const titleHeading = document.querySelector(".title");
+
     const playRound = function (playerMove) {
         // Make the move
         Gameboard.makeMove(playerMove);
 
         // Stop the message from showing up if the game is won.
         if (!isGameOver()) {
-            alert(`${Gameboard.turnPlayer().name}, it's your turn.`);
-
+            titleHeading.textContent = `${Gameboard.turnPlayer().name}, it's your turn.`;
         }
     };
 
@@ -120,8 +122,10 @@ const Game = (function () {
         // Initiate the start of a new game
         Gameboard.clearBoard();
         displayController.render();
-        alert("Starting a new game...");
-        alert(`${window.playerO.name} goes first.`);
+        titleHeading.textContent = "Starting a new game...";
+        setTimeout(function () {
+           titleHeading.textContent = `${window.playerO.name} goes first.`;
+        }, 1000);
 
         gameDisplay.onclick = function roundHandler(event) {
             playRound(event.target.dataAttribute.split(",").map(stringNumber => parseInt(stringNumber)));
@@ -132,7 +136,6 @@ const Game = (function () {
 
                 // If there is a winner, announce him, else it's a tie
                 // The isGameOver() function returns a winner if existing
-                const winnerAnnouncementDiv = document.querySelector(".winner-announcement");
                 if (playerIcons.includes(isGameOver())) {
                     let winner;
                     if (isGameOver() === "O") {
@@ -140,11 +143,9 @@ const Game = (function () {
                     } else {
                         winner = window.playerX;
                     }
-                    winnerAnnouncementDiv.textContent = `The winner is ${winner.name}!`;
-                    alert(`The winner is ${winner.name}!`);
+                    titleHeading.textContent = `The winner is ${winner.name}!`;
                 } else {
-                    winnerAnnouncementDiv.textContent = "It's a tie.";
-                    alert("It's a tie.");
+                    titleHeading.textContent = "It's a tie.";
                 }
             }
         };
@@ -205,13 +206,6 @@ startGameButton.addEventListener("click", (event) => {
     if (!playerOName || !playerXName) {
         alert("Please input both players' names.");
     } else {
-        // Remove event handler from previous round
-        // gameDisplay.removeEventListener("click", roundHandler);
-
-        // Clear the result announcement of the last round
-        const winnerAnnouncementDiv = document.querySelector(".winner-announcement");
-        winnerAnnouncementDiv.textContent = "";
-
         // Create players as global variables
         window.playerO = Player(playerOName, "O");
         window.playerX = Player(playerXName, "X");
